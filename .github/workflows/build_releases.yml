@@ -12,6 +12,8 @@ jobs:
   get_version_name:
     name: Get version name
     runs-on: ubuntu-latest
+    outputs:
+      version_name: ${{ steps.rev.outputs.version_name }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -28,7 +30,7 @@ jobs:
         else
           VERSION=r${REVCOUNT}
         fi
-        echo "VERSION_NAME=${VERSION}" >> $GITHUB_OUTPUT
+        echo "version_name=${VERSION}" >> $GITHUB_OUTPUT
 
   build:
     name: Upload Release Asset
@@ -74,13 +76,13 @@ jobs:
         run: |
           mkdir checkclinfo_release
           copy _build\${{ matrix.platform }}\Release\checkclinfo.exe checkclinfo_release
-          7z a -mx9 checkclinfo_${{ needs.get_version_name.outputs.VERSION_NAME }}_${{ matrix.arch }}.zip .\checkclinfo_release\*
+          7z a -mx9 checkclinfo_${{ needs.get_version_name.outputs.version_name }}_${{ matrix.arch }}.zip .\checkclinfo_release\*
 
       - name: Check Version
         if: startsWith(github.ref, 'refs/tags/')
         id: check_ver
         run: |
-          powershell "$ver = (Get-ItemProperty .\checkclinfo_release\checkclinfo.exe).VersionInfo.FileVersion; if ($ver -eq '${{ needs.get_version_name.outputs.VERSION_NAME }}') { exit 0; } exit 1;"
+          powershell "$ver = (Get-ItemProperty .\checkclinfo_release\checkclinfo.exe).VersionInfo.FileVersion; if ($ver -eq '${{ needs.get_version_name.outputs.version_name }}') { exit 0; } exit 1;"
 
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -89,4 +91,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: checkclinfo_${{ needs.get_version_name.outputs.VERSION_NAME }}_${{ matrix.arch }}.zip
+          files: checkclinfo_${{ needs.get_version_name.outputs.version_name }}_${{ matrix.arch }}.zip
