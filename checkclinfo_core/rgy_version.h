@@ -53,7 +53,7 @@ const char *get_encoder_version();
 #define ENCODER_NVENC  0
 #define ENCODER_VCEENC 0
 #define CLFILTERS_AUF  0
-#define HWENC          1
+#define CHECKCLINFO    1
 
 #define GPU_VENDOR ""
 

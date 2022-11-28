@@ -29,6 +29,8 @@
 #include "rgy_tchar.h"
 #include "rgy_resource.h"
 
+#if !CHECKCLINFO
+
 #if !(defined(_WIN32) || defined(_WIN64))
 extern "C" {
 extern char _binary_PerfMonitor_perf_monitor_pyw_start[];
@@ -151,8 +153,11 @@ static const RGYResourceData RGY_RESOURCE_DATA[] = {
 };
 #endif //#if !(defined(_WIN32) || defined(_WIN64))
 
+#endif //#if !CHECKCLINFO
+
 int getEmbeddedResource(void **data, const TCHAR *name, const TCHAR *type, HMODULE hModule) {
     *data = nullptr;
+#if !CHECKCLINFO
 #if defined(_WIN32) || defined(_WIN64)
     //埋め込みデータを使用する
     if (hModule == NULL) {
@@ -181,9 +186,13 @@ int getEmbeddedResource(void **data, const TCHAR *name, const TCHAR *type, HMODU
     }
     return 0;
 #endif
+#else //#if !CHECKCLINFO
+    return 0;
+#endif //#if !CHECKCLINFO
 }
 
 std::string getEmbeddedResourceStr(const tstring& name, const tstring& type, HMODULE hModule) {
+#if !CHECKCLINFO
     std::string data_str;
     {
         char* data = nullptr;
@@ -204,4 +213,7 @@ std::string getEmbeddedResourceStr(const tstring& name, const tstring& type, HMO
         }
     }
     return data_str;
+#else //#if !CHECKCLINFO
+    return "";
+#endif //#if !CHECKCLINFO
 }

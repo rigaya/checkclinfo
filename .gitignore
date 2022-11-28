@@ -10,6 +10,7 @@ ffmpeg_lgpl/
 
 # Build results
 
+checkclinfo
 [Dd]ebug/
 [Rr]elease/
 build/
@@ -17,6 +18,9 @@ _build/
 [Bb]in/
 [Oo]bj/
 Win32/
+.depend
+*.cpp.o
+rgy_rev.h
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/

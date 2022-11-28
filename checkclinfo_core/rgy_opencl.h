@@ -42,9 +42,15 @@
 #define ENABLE_RGY_OPENCL_D3D11 ENABLE_D3D11
 #define ENABLE_RGY_OPENCL_VA    0
 #else
+#if defined(_WIN32) || defined(_WIN64)
 #define ENABLE_RGY_OPENCL_D3D9  1
 #define ENABLE_RGY_OPENCL_D3D11 1
 #define ENABLE_RGY_OPENCL_VA    0
+#else
+#define ENABLE_RGY_OPENCL_D3D9  0
+#define ENABLE_RGY_OPENCL_D3D11 0
+#define ENABLE_RGY_OPENCL_VA    0
+#endif
 #endif
 
 #include "rgy_osdep.h"
